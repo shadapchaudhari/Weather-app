@@ -1,5 +1,5 @@
 async function getFullWeather(city) {
-  const apiKey = 'YOUR_API_KEY';
+  const apiKey = '9cfd609f131149c4b25141953251604';
   const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
   const currentHour = new Date().getHours();
 
