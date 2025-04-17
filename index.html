@@ -42,6 +42,7 @@
       </div>
     </div>
   </div>
+
   <script>
     function handleSearch() {
       const city = document.getElementById('cityInput').value;
@@ -51,32 +52,32 @@
         alert("Please enter a city name!");
       }
     }
-  
+
     async function getFullWeather(city) {
       const apiKey = '9cfd609f131149c4b25141953251604'; // Replace with your actual API key
       const today = new Date().toISOString().split('T')[0];
       const now = new Date().getTime();
-  
+
       try {
-        const currentRes = await fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
+        const currentRes = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`);
         const currentData = await currentRes.json();
-  
-        const historyRes = await fetch(`http://api.weatherapi.com/v1/history.json?key=${apiKey}&q=${city}&dt=${today}`);
+
+        const historyRes = await fetch(`https://api.weatherapi.com/v1/history.json?key=${apiKey}&q=${city}&dt=${today}`);
         const historyData = await historyRes.json();
-  
-        const forecastRes = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1`);
+
+        const forecastRes = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1`);
         const forecastData = await forecastRes.json();
-  
+
         const pastHours = historyData.forecast.forecastday[0].hour
           .filter(h => new Date(h.time).getTime() < now)
           .slice(-4);
-  
+
         const currentHourData = currentData.current;
-  
+
         const futureHours = forecastData.forecast.forecastday[0].hour
           .filter(h => new Date(h.time).getTime() > now)
           .slice(0, 4);
-  
+
         // Update main weather
         document.getElementById("cityName").textContent = currentData.location.name;
         document.getElementById("condition").textContent = currentHourData.condition.text;
@@ -84,7 +85,7 @@
         document.getElementById("humidity").textContent = currentHourData.humidity;
         document.getElementById("wind").textContent = currentHourData.wind_kph;
         document.getElementById("weatherIcon").src = currentHourData.condition.icon;
-  
+
         // Display past 4 hours
         document.getElementById("pastHours").innerHTML = pastHours.map(h => `
           <div>
@@ -93,7 +94,7 @@
             <img src="${h.condition.icon}" alt="icon" width="40" />
           </div>
         `).join('');
-  
+
         // Display current hour
         document.getElementById("currentHour").innerHTML = `
           <div>
@@ -102,7 +103,7 @@
             <img src="${currentHourData.condition.icon}" alt="icon" width="40" />
           </div>
         `;
-  
+
         // Display future 4 hours
         document.getElementById("futureHours").innerHTML = futureHours.map(h => `
           <div>
@@ -111,7 +112,7 @@
             <img src="${h.condition.icon}" alt="icon" width="40" />
           </div>
         `).join('');
-  
+
       } catch (error) {
         alert("Failed to fetch weather data. Please check the city name or your API key.");
         console.error(error);
@@ -120,5 +121,3 @@
   </script>
 </body>
 </html>
-
-
